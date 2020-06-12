@@ -77,7 +77,7 @@ public class UserServiceImplementation implements UserService {
 					user.setUserStatus(true);
 					repository.save(user);					
 					String token = tokenGenerator.createToken(user.getUserId());
-					return ResponseEntity.status(HttpStatus.OK).body(new UserDetailsResponse(Util.OK_RESPONSE_CODE, "Login Successfull", token, user.getFirstName(), user.getLastName(), user.getEmail()));
+					return ResponseEntity.status(HttpStatus.OK).body(new UserDetailsResponse(Util.OK_RESPONSE_CODE, "Login Successfull", token));
 				}
 			}
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserDetailsResponse(Util.BAD_REQUEST_RESPONSE_CODE, "Login failed"));

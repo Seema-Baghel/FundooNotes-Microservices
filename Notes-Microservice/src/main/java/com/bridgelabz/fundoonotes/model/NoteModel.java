@@ -48,6 +48,9 @@ public class NoteModel {
 	
 	private LocalDateTime reminder;
 	
+//	@JsonIgnore
+//	@ManyToOne
+//	@JoinColumn(name = "userId")
 	private long userId;
 	
 	@Column(columnDefinition = "boolean default false")

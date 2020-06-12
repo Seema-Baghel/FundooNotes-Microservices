@@ -1,6 +1,5 @@
 package com.bridgelabz.fundoonotes.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +72,8 @@ public class UserController {
 	 * @return ResponseEntity<Response>
 	 */
 	
-	@GetMapping("/verify/{token}")
-	public ResponseEntity<Response> userVerification(@PathVariable("token") String token) throws UserNotFoundException {
+	@GetMapping("/verify")
+	public ResponseEntity<Response> userVerification(@RequestHeader("token") String token) throws UserNotFoundException {
 	    
 		return userservice.verify(token);
 	}
@@ -106,7 +105,7 @@ public class UserController {
 	 * @return ResponseEntity<Response>
 	 */
 	
-	@PutMapping("/resetpassword/{token}")
+	@PutMapping("/resetpassword")
 	public ResponseEntity<Response> resetPassword(@RequestBody ResetPasswordDto resetPassword, @RequestHeader String token) throws UserNotFoundException {
 		
 		return userservice.resetPassword(resetPassword, token);

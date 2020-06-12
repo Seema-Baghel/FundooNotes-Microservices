@@ -64,7 +64,7 @@ public class UserModel {
 //  	  @JsonIgnore
 //  	  @OneToMany(cascade = CascadeType.ALL)
 //  	  private List<NoteModel> notes;
-  	
+//  	
 //  	  @JsonIgnore
 //  	  @OneToMany(cascade = CascadeType.ALL)
 //  	  private List<LabelModel> label;

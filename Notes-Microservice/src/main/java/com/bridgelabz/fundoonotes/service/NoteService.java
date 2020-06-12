@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.model.NoteModel;
+import com.bridgelabz.fundoonotes.model.UserModel;
 import com.bridgelabz.fundoonotes.response.Response;
 
 @Component
