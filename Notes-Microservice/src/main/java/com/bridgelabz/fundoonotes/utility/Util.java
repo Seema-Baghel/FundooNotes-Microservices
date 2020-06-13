@@ -7,6 +7,7 @@ public class Util {
 	public static String resetpassword_url= "http://localhost:4200/resetpassword/";
 	public static final String SENDER_EMAIL_ID = "seemabaghel1997@gmail.com";
 	public static final String SENDER_PASSWORD = "seemabaghel@";
+	public static String USER_MICROSERVICE_URL = "http://User-Microservice/user/getUser/";
 	
 	public static final int OK_RESPONSE_CODE = 200;
 	public static final int BAD_REQUEST_RESPONSE_CODE = 400;

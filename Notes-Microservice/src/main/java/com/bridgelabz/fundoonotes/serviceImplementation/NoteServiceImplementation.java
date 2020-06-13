@@ -42,7 +42,7 @@ public class NoteServiceImplementation implements NoteService {
 	
 	@Override
 	public ResponseEntity<Response> createNote(NoteDto noteDto , String token) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		long userId= tokenGenerator.parseJwtToken(token);
 		if( user != null) {
 			BeanUtils.copyProperties(noteDto, notes);
@@ -55,10 +55,9 @@ public class NoteServiceImplementation implements NoteService {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Note not created "));
 	}
 
-
 	@Override
 	public ResponseEntity<Response> updateNote(NoteDto noteDto, long noteId, String token) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if(user != null) {
 			NoteModel note = noteRepository.findById(noteId);
 			if(note != null) {
@@ -74,7 +73,7 @@ public class NoteServiceImplementation implements NoteService {
 	
 	@Override
 	public ResponseEntity<Response> addColor( String token, long noteId, String color) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		long userId = tokenGenerator.parseJwtToken(token);
 		if (user != null) {
 			NoteModel note = noteRepository.findById(noteId);
@@ -89,7 +88,7 @@ public class NoteServiceImplementation implements NoteService {
 
 	@Override
 	public ResponseEntity<Response> deleteNote(String token, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		long userId = tokenGenerator.parseJwtToken(token);
 		if (user != null){		
 			noteRepository.deleteNote(userId, noteId);
@@ -100,7 +99,7 @@ public class NoteServiceImplementation implements NoteService {
 	
 	@Override
 	public ResponseEntity<Response> isArchivedNote(String token, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user != null) {
 			NoteModel note = noteRepository.findById(noteId);
 			if (!note.isArchived()) {
@@ -119,7 +118,7 @@ public class NoteServiceImplementation implements NoteService {
 	
 	@Override
 	public List<NoteModel> getAllNotes(String token) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		long userId = tokenGenerator.parseJwtToken(token);
 		if (user != null) {
 			List<NoteModel> notes = noteRepository.getAll(userId);
@@ -128,10 +127,9 @@ public class NoteServiceImplementation implements NoteService {
 		throw new NoteException("No User Found");
 	}
 
-
 	@Override
 	public ResponseEntity<Response> setReminder(String token, ReminderDateTimeDto reminderDateTimeDto, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user == null)
 			throw new NoteException("No user Found");
 		Optional<NoteModel> note = noteRepository.findBynoteId(noteId);
@@ -144,10 +142,9 @@ public class NoteServiceImplementation implements NoteService {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Reminder set successfully"));
 	}
 
-
 	@Override
 	public ResponseEntity<Response> unsetReminder(long noteId, String token) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user == null)
 			throw new NoteException("No user Found");
 		NoteModel note = noteRepository.findById(noteId);
@@ -156,10 +153,9 @@ public class NoteServiceImplementation implements NoteService {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Reminder unset successfully"));
 	}
 
-
 	@Override
 	public ResponseEntity<Response> isPinnedNote(String token, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user != null) {
 			NoteModel note = noteRepository.findById(noteId);
 				if (!note.isPinned()) {
@@ -176,10 +172,9 @@ public class NoteServiceImplementation implements NoteService {
 		throw new NoteException("Sorry! something went wrong");
 	}
 
-
 	@Override
 	public ResponseEntity<Response> trashNote(String token, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user != null) {
 			NoteModel note = noteRepository.findById(noteId);
 				if (!note.isTrashed()) {
@@ -196,10 +191,9 @@ public class NoteServiceImplementation implements NoteService {
 			throw new NoteException("Sorry! User not found");
 	}
 
-
 	@Override
 	public ResponseEntity<Response> restoreNote(String token, long noteId) {
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		if (user != null) {
 			NoteModel note = noteRepository.findById(noteId);
 			if (note.isTrashed()) {

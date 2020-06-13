@@ -35,7 +35,6 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
-	
 	@PostMapping("/create")
 	private ResponseEntity<Response> createNote(@RequestBody NoteDto notedto, @RequestHeader("token") String token)throws NoteException{
 		
