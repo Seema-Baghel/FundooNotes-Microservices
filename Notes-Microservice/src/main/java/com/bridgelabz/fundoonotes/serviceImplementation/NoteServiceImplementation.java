@@ -117,5 +117,15 @@ public class NoteServiceImplementation implements NoteService {
 		throw new NoteException("Sorry! User not found");
 	}
 	
-
+	@Override
+	public List<NoteModel> getAllNotes(String token) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		long userId = tokenGenerator.parseJwtToken(token);
+		if (user != null) {
+			List<NoteModel> notes = noteRepository.getAll(userId);
+			return notes;
+		}
+		throw new NoteException("No User Found");
+	}
+	
 }

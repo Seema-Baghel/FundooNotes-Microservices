@@ -66,5 +66,12 @@ public class NoteController {
 		return noteService.isArchivedNote(token, noteId);
 	}
 	
+	@GetMapping("/allnotes")
+	public ResponseEntity<Response> getAllNotes(@RequestHeader("token") String token)  {
+		
+		List<NoteModel> notesList = noteService.getAllNotes(token);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes of user", Util.OK_RESPONSE_CODE, notesList));
+	}
+	
 	
 }
