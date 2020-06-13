@@ -22,8 +22,12 @@ public class PreFilter extends ZuulFilter{
 
 	@Override
 	public Object run() throws ZuulException {
+		
+		//getting the current HTTP request that is to be handle
 		RequestContext context = RequestContext.getCurrentContext();
 		HttpServletRequest request = context.getRequest();
+		
+		//printing the details of the request
 		log.info("Prefilter:"+String.format("%s request to %s",request.getMethod() , request.getRequestURL().toString()));
 		
 		return null;

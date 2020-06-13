@@ -73,5 +73,36 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes of user", Util.OK_RESPONSE_CODE, notesList));
 	}
 	
+	@PostMapping("/setReminder/{id}")
+	public ResponseEntity<Response> setReminder(@RequestHeader("token") String token, @RequestBody ReminderDateTimeDto reminderDateTimeDto, @PathVariable("id") long id) {
+		
+		return noteService.setReminder(token, reminderDateTimeDto, id);
+	}
+	
+	@PutMapping("/unsetReminder/{id}")
+	public ResponseEntity<Response> unsetReminder(@PathVariable("id") long id, @RequestHeader("token") String token) {
+
+		return noteService.unsetReminder(id, token);
+	}
+	
+	@PatchMapping("/pin/{id}")
+	public ResponseEntity<Response> pinNote(@RequestHeader("token") String token, @PathVariable("id") long noteId) {
+
+		return noteService.isPinnedNote(token, noteId);
+	}
+	
+	@DeleteMapping("/trash")
+	public ResponseEntity<Response> trashNote(@RequestHeader("token") String token,@RequestParam("id") long noteId) {
+
+		return noteService.trashNote(token, noteId); 
+	}
+	
+	@PutMapping("/restore")
+	public ResponseEntity<Response> restoreFromTrashed(@RequestHeader("token") String token, @RequestParam("id") long noteId) {
+		 
+		return noteService.restoreNote(token, noteId);
+	}
+	
+	
 	
 }

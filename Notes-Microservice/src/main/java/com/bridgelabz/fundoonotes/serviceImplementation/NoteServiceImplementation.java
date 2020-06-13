@@ -2,6 +2,8 @@ package com.bridgelabz.fundoonotes.serviceImplementation;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,10 +44,8 @@ public class NoteServiceImplementation implements NoteService {
 	public ResponseEntity<Response> createNote(NoteDto noteDto , String token) {
 		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
 		long userId= tokenGenerator.parseJwtToken(token);
-		System.out.println(userId);
 		if( user != null) {
 			BeanUtils.copyProperties(noteDto, notes);
-			System.out.println(userId);
 			notes.setUserId(userId);
 			notes.setCreatedDate(LocalDateTime.now());
 			notes.setUpdatedDate(LocalDateTime.now());
@@ -126,6 +126,91 @@ public class NoteServiceImplementation implements NoteService {
 			return notes;
 		}
 		throw new NoteException("No User Found");
+	}
+
+
+	@Override
+	public ResponseEntity<Response> setReminder(String token, ReminderDateTimeDto reminderDateTimeDto, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user == null)
+			throw new NoteException("No user Found");
+		Optional<NoteModel> note = noteRepository.findBynoteId(noteId);
+		LocalDateTime reminderDateTime = LocalDateTime.of(reminderDateTimeDto.getYear(), reminderDateTimeDto.getMonth(),
+														  reminderDateTimeDto.getDay(), reminderDateTimeDto.getHour(),
+														  reminderDateTimeDto.getMinute());
+		LocalDateTime date = reminderDateTime;
+		note.get().setReminder(date);
+		noteRepository.save(note.get());
+		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Reminder set successfully"));
+	}
+
+
+	@Override
+	public ResponseEntity<Response> unsetReminder(long noteId, String token) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user == null)
+			throw new NoteException("No user Found");
+		NoteModel note = noteRepository.findById(noteId);
+		note.setReminder(null);
+		noteRepository.save(note);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Reminder unset successfully"));
+	}
+
+
+	@Override
+	public ResponseEntity<Response> isPinnedNote(String token, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user != null) {
+			NoteModel note = noteRepository.findById(noteId);
+				if (!note.isPinned()) {
+					note.setPinned(true);
+					note.setUpdatedDate(LocalDateTime.now());
+					noteRepository.save(note);
+					return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Note pinned"));
+				}
+				note.setPinned(false);
+				note.setUpdatedDate(LocalDateTime.now());
+				noteRepository.save(note);
+				return ResponseEntity.status(HttpStatus.CREATED).body(new Response(Util.OK_RESPONSE_CODE, "Note unpinned"));
+		}
+		throw new NoteException("Sorry! something went wrong");
+	}
+
+
+	@Override
+	public ResponseEntity<Response> trashNote(String token, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user != null) {
+			NoteModel note = noteRepository.findById(noteId);
+				if (!note.isTrashed()) {
+					note.setTrashed(true);
+					note.setArchived(false);
+					note.setPinned(false);
+					note.setReminder(null);
+					note.setUpdatedDate(LocalDateTime.now());
+					noteRepository.save(note);
+					return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Note trashed"));
+				}
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE,"Error! Note is not trashed"));
+			}
+			throw new NoteException("Sorry! User not found");
+	}
+
+
+	@Override
+	public ResponseEntity<Response> restoreNote(String token, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user != null) {
+			NoteModel note = noteRepository.findById(noteId);
+			if (note.isTrashed()) {
+				note.setTrashed(false);
+				note.setUpdatedDate(LocalDateTime.now());
+				noteRepository.save(note);
+				return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE,"Note restored"));
+			}
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE,"Error in Restoring note!"));
+		}
+		throw new NoteException("Sorry! User not found");
 	}
 	
 }
