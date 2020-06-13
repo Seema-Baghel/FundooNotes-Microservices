@@ -48,7 +48,11 @@ public class NoteController {
 		return noteService.updateNote(notedto, id, token);
 	}
 	
-	
+	@PutMapping("/addcolor")
+	public ResponseEntity<Response> addColor(@RequestHeader("token") String token, @RequestParam("id") long id, @RequestParam("color") String color){
+		
+		return noteService.addColor(token, id, color);
+	}
 	
 	
 }

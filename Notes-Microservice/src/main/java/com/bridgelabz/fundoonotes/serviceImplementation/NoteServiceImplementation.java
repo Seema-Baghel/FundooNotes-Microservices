@@ -72,6 +72,20 @@ public class NoteServiceImplementation implements NoteService {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Something went wrong"));
 	}
 	
-	
+	@Override
+	public ResponseEntity<Response> addColor( String token, long noteId, String color) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		long userId = tokenGenerator.parseJwtToken(token);
+		if (user != null) {
+			NoteModel note = noteRepository.findById(noteId);
+			if (note != null) {
+				noteRepository.updateColor(userId, noteId, color);
+				return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Color is added"));
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Error! color is not added"));
+		}
+		throw new NoteException("No User Found");
+	}
+
 	
 }

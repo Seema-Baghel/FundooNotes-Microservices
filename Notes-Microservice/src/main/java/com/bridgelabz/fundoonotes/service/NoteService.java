@@ -17,8 +17,8 @@ public interface NoteService {
 	
 	public ResponseEntity<Response> updateNote(NoteDto noteDto, long noteId, String token);
 
-//	public ResponseEntity<Response> addColor(String token, long noteId, String noteColor);
-//	
+	public ResponseEntity<Response> addColor(String token, long noteId, String noteColor);
+	
 //	public ResponseEntity<Response> deleteNote(String token, long noteId);
 //
 //	public List<NoteModel> getAllNotes(String token);
