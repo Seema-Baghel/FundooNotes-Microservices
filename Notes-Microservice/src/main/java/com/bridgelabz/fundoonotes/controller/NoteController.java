@@ -54,5 +54,11 @@ public class NoteController {
 		return noteService.addColor(token, id, color);
 	}
 	
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteNote(@RequestHeader("token") String token, @RequestParam("id") long id){		
+
+		return noteService.deleteNote(token, id);	
+	}
+	
 	
 }

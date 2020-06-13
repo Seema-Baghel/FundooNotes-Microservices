@@ -87,5 +87,16 @@ public class NoteServiceImplementation implements NoteService {
 		throw new NoteException("No User Found");
 	}
 
+	@Override
+	public ResponseEntity<Response> deleteNote(String token, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		long userId = tokenGenerator.parseJwtToken(token);
+		if (user != null){		
+			noteRepository.deleteNote(userId, noteId);
+			return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Deleted Succussfully"));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Error! note can't be deleted"));
+	}
+	
 	
 }
