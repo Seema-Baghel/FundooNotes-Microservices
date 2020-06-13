@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -60,6 +61,11 @@ public class UserModel {
   	  
   	  @Column(columnDefinition = "boolean default false")
   	  public boolean userStatus;
+  	  
+//  	  @JsonIgnore
+//  	  @OneToMany(cascade = CascadeType.ALL)
+//  	  @JoinColumn(name = "user_id")
+//  	  private List<NoteModel> notes;
   	  
 //  	  @JsonIgnore
 //  	  @OneToMany(cascade = CascadeType.ALL)

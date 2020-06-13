@@ -35,52 +35,20 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
-	@Autowired
-	private RestTemplate restTemplate;
-
-		
+	
 	@PostMapping("/create")
 	private ResponseEntity<Response> createNote(@RequestBody NoteDto notedto, @RequestHeader("token") String token)throws NoteException{
 		
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
-
-		if(user!=null) {
-			noteService.createNote(notedto, token, user.getUserId());
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Note is created successfully"));
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Note not created "));
+		return noteService.createNote(notedto, token);	
 	}
 	
 	@PostMapping("/updatenote")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteDto notedto, @RequestParam("id") long id, @RequestHeader("token") String token) {
 		
-		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
-		if(user!=null) {
-				noteService.updateNote(notedto, id);
-		 return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Note is Updated successfully"));
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Note not updated "));
+		return noteService.updateNote(notedto, id, token);
 	}
 	
-//	@PutMapping("/addcolor")
-//	public ResponseEntity<Response> addColor(@RequestHeader("token") String token, @RequestParam("id") long id, @RequestParam("color") String color){
-//		
-//		return noteService.addColor(token, id, color);
-//	}
-//	
-//	@DeleteMapping("/delete")
-//	public ResponseEntity<Response> deleteNote(@RequestHeader("token") String token, @RequestParam("id") long id){
-//
-//		return noteService.deleteNote(token, id);
-//	}
-//	
-//	
-//	@GetMapping("/allnotes")
-//	public ResponseEntity<Response> getAllNotes(@RequestHeader("token") String token)  {
-//		
-//		List<NoteModel> notesList = noteService.getAllNotes(token);
-//		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes of user", Util.OK_RESPONSE_CODE, notesList));
-//	}
-//	
+	
+	
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bridgelabz.fundoonotes.model.NoteModel;
+import com.bridgelabz.fundoonotes.model.UserModel;
 
 @Repository
 @Transactional
