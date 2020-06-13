@@ -98,5 +98,24 @@ public class NoteServiceImplementation implements NoteService {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(Util.BAD_REQUEST_RESPONSE_CODE, "Error! note can't be deleted"));
 	}
 	
+	@Override
+	public ResponseEntity<Response> isArchivedNote(String token, long noteId) {
+		UserModel user = restTemplate.getForObject("http://User-Microservice/user/getUser/"+token,UserModel.class);
+		if (user != null) {
+			NoteModel note = noteRepository.findById(noteId);
+			if (!note.isArchived()) {
+				note.setArchived(true);
+				note.setUpdatedDate(LocalDateTime.now());
+				noteRepository.save(note);
+				return ResponseEntity.status(HttpStatus.OK).body(new Response(Util.OK_RESPONSE_CODE, "Note archieved"));
+			}
+			note.setArchived(false);
+			note.setUpdatedDate(LocalDateTime.now());
+			noteRepository.save(note);
+			return ResponseEntity.status(HttpStatus.CREATED).body(new Response(Util.OK_RESPONSE_CODE, "Note unarchived"));
+		}
+		throw new NoteException("Sorry! User not found");
+	}
 	
+
 }

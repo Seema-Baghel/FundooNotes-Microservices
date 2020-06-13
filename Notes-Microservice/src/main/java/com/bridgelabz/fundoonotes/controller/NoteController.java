@@ -60,5 +60,11 @@ public class NoteController {
 		return noteService.deleteNote(token, id);	
 	}
 	
+	@DeleteMapping("/archive")
+	public ResponseEntity<Response> archieveNote(@RequestHeader("token") String token, @RequestParam("id") long noteId) {
+		
+		return noteService.isArchivedNote(token, noteId);
+	}
+	
 	
 }

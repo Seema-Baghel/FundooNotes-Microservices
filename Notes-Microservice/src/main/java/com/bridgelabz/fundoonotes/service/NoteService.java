@@ -22,8 +22,8 @@ public interface NoteService {
 	public ResponseEntity<Response> deleteNote(String token, long noteId);
 
 //	public List<NoteModel> getAllNotes(String token);
-//
-//	public ResponseEntity<Response> isArchivedNote(String token, long noteId);
+
+	public ResponseEntity<Response> isArchivedNote(String token, long noteId);
 
 	
 
