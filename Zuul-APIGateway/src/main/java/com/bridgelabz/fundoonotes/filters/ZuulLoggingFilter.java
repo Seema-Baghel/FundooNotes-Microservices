@@ -11,9 +11,9 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
 @Component
-public class PreFilter extends ZuulFilter{
+public class ZuulLoggingFilter extends ZuulFilter{
 	
-	private static Logger log = LoggerFactory.getLogger(PreFilter.class);
+	private static Logger log = LoggerFactory.getLogger(ZuulLoggingFilter.class);
 
 	@Override
 	public boolean shouldFilter() {

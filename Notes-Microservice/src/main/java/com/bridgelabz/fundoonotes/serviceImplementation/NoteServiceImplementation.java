@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.ReminderDateTimeDto;
 import com.bridgelabz.fundoonotes.exception.NoteException;
-import com.bridgelabz.fundoonotes.exception.UserNotFoundException;
 import com.bridgelabz.fundoonotes.model.NoteModel;
 import com.bridgelabz.fundoonotes.model.UserModel;
 import com.bridgelabz.fundoonotes.repository.NoteRepository;
@@ -30,9 +30,7 @@ public class NoteServiceImplementation implements NoteService {
 	private NoteRepository noteRepository;
 	
 	@Autowired
-	private Jwt tokenGenerator;
-	
-	private NoteModel notes = new NoteModel();
+	private Jwt tokenGenerator;	
 	 
 	@Autowired
 	List<NoteDto> listOfNotes;
@@ -45,7 +43,8 @@ public class NoteServiceImplementation implements NoteService {
 		UserModel user = restTemplate.getForObject(Util.USER_MICROSERVICE_URL+token,UserModel.class);
 		long userId= tokenGenerator.parseJwtToken(token);
 		if( user != null) {
-			BeanUtils.copyProperties(noteDto, notes);
+			ModelMapper mapper = new ModelMapper();
+			NoteModel notes =mapper.map(noteDto, NoteModel.class);
 			notes.setUserId(userId);
 			notes.setCreatedDate(LocalDateTime.now());
 			notes.setUpdatedDate(LocalDateTime.now());

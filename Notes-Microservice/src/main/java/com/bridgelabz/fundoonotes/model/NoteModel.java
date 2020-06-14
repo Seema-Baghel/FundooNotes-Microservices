@@ -62,13 +62,10 @@ public class NoteModel {
 	@Column(columnDefinition = "boolean default false")
 	private boolean isTrashed;
 	
-//	@JsonIgnore
-//	@ManyToMany(cascade = CascadeType.ALL)
-//	private List<LabelModel> labels;
-//	
-//	@JsonIgnore
-//	@ManyToMany(cascade = CascadeType.ALL)
-//	private Set<UserModel> collaborator;
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<LabelModel> labels;
+	
 	
 	public NoteModel(String title, String description) {
 		super();

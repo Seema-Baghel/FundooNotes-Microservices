@@ -18,6 +18,9 @@ import com.bridgelabz.fundoonotes.model.UserModel;
 @Transactional
 public interface NoteRepository extends JpaRepository<NoteModel, Long>{
 
+//	@Query(value = "select * from user_model where user_id = :userId", nativeQuery = true)
+//	UserModel findByUserId(long userId);
+
 	@Query(value = "select * from note_model where note_id = :noteId", nativeQuery = true)
 	Optional<NoteModel> findBynoteId(long noteId);
 	

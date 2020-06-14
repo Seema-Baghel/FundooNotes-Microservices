@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,24 +32,24 @@ public class UserModel {
 	  @Column(name = "user_id")
       private long userId;
 	   
-	  
+	  @NotNull
       private String firstName;
 	   
-	 
+	  @NotNull
       private String lastName;
       
-      
+	  @NotNull
       @Column(unique = true)
       private String email;
       
-    
+	  @NotNull
       @Column(unique = true)
       private String mobile;
       
-     
+	  @NotNull
       private String password;
       
-      
+	  @NotNull
       @Column(columnDefinition = "boolean default false")
       private boolean isVerified;
       
@@ -61,23 +61,6 @@ public class UserModel {
   	  
   	  @Column(columnDefinition = "boolean default false")
   	  public boolean userStatus;
-  	  
-//  	  @JsonIgnore
-//  	  @OneToMany(cascade = CascadeType.ALL)
-//  	  @JoinColumn(name = "user_id")
-//  	  private List<NoteModel> notes;
-  	  
-//  	  @JsonIgnore
-//  	  @OneToMany(cascade = CascadeType.ALL)
-//  	  private List<NoteModel> notes;
-//  	
-//  	  @JsonIgnore
-//  	  @OneToMany(cascade = CascadeType.ALL)
-//  	  private List<LabelModel> label;
-//  	
-//  	  @JsonIgnore
-//  	  @ManyToMany(cascade = CascadeType.ALL)
-//  	  private Set<NoteModel> collaboratedNotes;
   	  
   	  public UserModel(String firstName, String lastName, String email, String mobile, String password) {
 		super();
